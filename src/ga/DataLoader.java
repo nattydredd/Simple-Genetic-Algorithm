@@ -1,7 +1,6 @@
 package ga;
 
 //@author n2-duran
-import static ga.AssignmentGA.fileName;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,13 +9,15 @@ import java.util.ArrayList;
 
 public class DataLoader {
 
-    String fileName;
-    String path;
-    ArrayList data;
+    private String fileName;
+    private String path;
+    private ArrayList data;
 
-    public DataLoader(String fileName, String path) {
-        this.fileName = fileName;
+    public DataLoader(String path, String fileName) {
         this.path = path;
+        this.fileName = fileName;
+        this.data = new ArrayList();
+        this.data = loadData();
     }
 
     public String getFileName() {
@@ -31,22 +32,29 @@ public class DataLoader {
         return data;
     }
 
-    public ArrayList loadBinaryData() {
-        ArrayList instance;
-        String line;
+    //Load data
+    public ArrayList loadData() {
+
+        String line;      
         try {
-            //Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            //Read file at specified path
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path + fileName));
 
             while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-                instance = new ArrayList();
                 
-                data.add(line);
+                //Create array for each instance of data
+                ArrayList<String> instance = new ArrayList<String>();
+                int varCount = line.split(" ").length;
+                
+                for (int i = 0; i < varCount; i++) {
+                    instance.add(line.split(" ")[i]);
+                }                
+                data.add(instance);
             }
 
-            // Always close files.
+            //Close
             bufferedReader.close();
+
         } catch (FileNotFoundException ex) {
             System.out.println(
                     "Unable to open file '" + fileName + "'");
@@ -56,4 +64,5 @@ public class DataLoader {
 
         return data;
     }
-}
+    
+}// End DataLoader

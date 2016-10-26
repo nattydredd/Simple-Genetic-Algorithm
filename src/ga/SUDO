@@ -1,9 +1,0 @@
-6 bits per rule (data1)
-10 rules per individual = 60 bits
-
-Read file into data structure
-
-data structure for each rule
-
-fitness++ for each rule the individual has correct
-
