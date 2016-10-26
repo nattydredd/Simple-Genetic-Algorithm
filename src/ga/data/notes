@@ -1,0 +1,6 @@
+Initialised pop count as gen 1? or only gen 1 after xover etc?
+
+Selection within xover? or 
+Select whole new pop then xover with random choice or consecutive pairs (cant do odd)
+
+TODO: Check my xover

@@ -11,12 +11,13 @@ public class DataLoader {
 
     private String fileName;
     private String path;
-    private ArrayList data = new ArrayList();
+    private ArrayList data;
 
     public DataLoader(String path, String fileName) {
         this.path = path;
         this.fileName = fileName;
-        
+        this.data = new ArrayList();
+        this.data = loadData();
     }
 
     public String getFileName() {
@@ -34,8 +35,7 @@ public class DataLoader {
     //Load data
     public ArrayList loadData() {
 
-        String line;
-        
+        String line;      
         try {
             //Always wrap FileReader in BufferedReader.
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path + fileName));
@@ -46,16 +46,14 @@ public class DataLoader {
                 int varCount = line.split(" ").length;
                 
                 for (int i = 0; i < varCount; i++) {
-                    String tmp = line.split(" ")[i];
-                    instance.add(tmp);
+                    instance.add(line.split(" ")[i]);
                 }
-                
                 data.add(instance);
             }
 
             //Close
             bufferedReader.close();
-            
+
         } catch (FileNotFoundException ex) {
             System.out.println(
                     "Unable to open file '" + fileName + "'");
@@ -65,4 +63,5 @@ public class DataLoader {
 
         return data;
     }
-}
+    
+}// End DataLoader

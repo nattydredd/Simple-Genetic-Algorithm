@@ -3,22 +3,24 @@ package ga;
 //@author n2-duran
 
 public class Individual {
-    private char[] genes;
+    private char[] chromosome;
     private int fitness = 0;
 
-    public Individual() {     
+    public Individual() {
+        this.fitness = 0;
     }
 
-    public Individual(char[] genes) {
-        this.genes = genes;
+    public Individual(char[] chromosome) {
+        this.fitness = 0;
+        this.chromosome = chromosome;
     }
 
-    public char[] getGenes() {
-        return genes;
+    public char[] getChromosome() {
+        return chromosome;
     }
 
-    public void setGenes(char[] genes) {
-        this.genes = genes;
+    public void setChromosome(char[] chromosome) {
+        this.chromosome = chromosome;
     }
 
     public int getFitness() {
@@ -31,15 +33,15 @@ public class Individual {
     
     @Override
     public String toString() {
-        String result = "Genes = ";
         
-        for (int i = 0; i < this.genes.length; i++) {           
-            result += genes[i];
+        String result = "Genes = ";     
+        for (int i = 0; i < chromosome.length; i++) {           
+            result += chromosome[i];
         }
-        result += " Chromosome length = " + genes.length;
+        result += " Chromosome length = " + chromosome.length;
         result += " Fitness = " + fitness;
-        return result;
-                
-    }
         
-}
+        return result;               
+    }
+    
+}// End Individual
