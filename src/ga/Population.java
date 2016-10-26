@@ -9,13 +9,17 @@ public class Population {
 
     private int populationSize;
     private int chromosomeLength;
+    private int ruleLength;
     private Individual fittestIndividual = new Individual();
     private Individual[] individuals;
 
-    public Population(int populationSize, int chromosomeLength) {
+    public Population(int populationSize, int chromosomeLength, int ruleLength) {
         this.populationSize = populationSize;
         this.chromosomeLength = chromosomeLength;
+        this.ruleLength = ruleLength;
         this.individuals = new Individual[populationSize];
+        //Initialise a new population
+        initialise();
     }
 
     public int getPopulationSize() {
@@ -51,12 +55,26 @@ public class Population {
 
         for (int i = 0; i < populationSize; i++) {
 
-            char[] tmpGenes = new char[chromosomeLength];
+            char[] tmpChromosome = new char[chromosomeLength];
+            int index = ruleLength - 1;
 
             for (int j = 0; j < chromosomeLength; j++) {
-                tmpGenes[j] = rng.nextBoolean() ? '1' : '0';
+
+                //Check index is not a rule consequent
+                if (j != index) {
+
+                    int tmpRng = rng.nextInt(3);
+                    if (tmpRng == 2) {
+                        tmpChromosome[j] = '#';
+                    } else {
+                        tmpChromosome[j] = (tmpRng == 1) ? '1' : '0';
+                    }
+                } else {
+                    tmpChromosome[j] = rng.nextBoolean() ? '1' : '0';
+                    index += ruleLength;
+                }
             }
-            individuals[i] = new Individual(tmpGenes);
+            individuals[i] = new Individual(tmpChromosome);
         }
     }
 
@@ -109,16 +127,22 @@ public class Population {
     public void mutation(double mutationRate) {
 
         for (int i = 0; i < populationSize; i++) {
+            int index = ruleLength - 1;
             for (int j = 0; j < chromosomeLength; j++) {
+                //Check index is not a rule consequent
+                if (j != index) {
+                    if (Math.random() <= mutationRate) {
 
-                if (Math.random() <= mutationRate) {
-                    if (individuals[i].getChromosome()[j] == '1') {
-                        individuals[i].getChromosome()[j] = '0';
-                    } else {
-                        individuals[i].getChromosome()[j] = '1';
+                        if (individuals[i].getChromosome()[j] == '1') {
+                            individuals[i].getChromosome()[j] = (rng.nextBoolean()) ? '#' : '0';
+                        } else {
+                            individuals[i].getChromosome()[j] = (rng.nextBoolean()) ? '#' : '1';
+                        }
+
                     }
+                } else {
+                    index += ruleLength;
                 }
-                
             }
         }
     }

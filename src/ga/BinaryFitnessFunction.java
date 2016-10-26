@@ -10,15 +10,15 @@ public class BinaryFitnessFunction {
     private int ruleLength;
     private static ArrayList<BinaryRule> ruleSet;
 
-    public BinaryFitnessFunction(ArrayList data, int rulesPerIndividual) {
+    public BinaryFitnessFunction(ArrayList data, int rulesPerIndividual, int ruleLength) {
         this.rulesPerIndividual = rulesPerIndividual;
+        this.ruleLength = ruleLength;       
         this.ruleSet = new ArrayList<BinaryRule>();
         this.ruleSet = createRuleSet(data);
     }
 
     public void evaluatePopulation(Population population) {
         for (int i = 0; i < population.getPopulationSize(); i++) {
-//            System.out.println("Evaluating individual " + i);
             fitnessFunction(population.getIndividual(i));
         }
     }
@@ -30,8 +30,6 @@ public class BinaryFitnessFunction {
     private void fitnessFunction(Individual individual) {
 
         int fitness = 0;
-        ruleLength = individual.getChromosome().length / rulesPerIndividual;
-        ArrayList<BinaryRule> tmpRuleSet = (ArrayList) ruleSet.clone();
         char[] antecedent = new char[rulesPerIndividual];
         char consequent;
         int index = 0;
@@ -43,11 +41,10 @@ public class BinaryFitnessFunction {
             index += ruleLength;
 
             //Compare individuals rules to ruleSet
-//            for (BinaryRule rule : tmpRuleSet) {
-            for (int j = 0; j < tmpRuleSet.size(); j++) {
-                BinaryRule rule = tmpRuleSet.get(j);
+            for (int j = 0; j < ruleSet.size(); j++) {
+                BinaryRule rule = ruleSet.get(j);
 
-                if (compareAntecedents(antecedent, rule.antecedent) && consequent == rule.consequent) {
+                if (compareAntecedents(antecedent, rule.antecedent)) {
 
 //                    System.out.println("Rule matches!");
 //                    System.out.print("Antecedent = ");
@@ -59,9 +56,11 @@ public class BinaryFitnessFunction {
 //                        System.out.print(rule.antecedent[k]);
 //                    }
 //                    System.out.println("\nConsequent = " + consequent + "\nRule Consequent = " + rule.consequent);
-
-                    tmpRuleSet.remove(j);
-                    fitness++;
+                   
+                    if (consequent == rule.consequent) {
+                        fitness++;
+                    }
+                    break;                   
                 }
             }
         }
@@ -70,14 +69,14 @@ public class BinaryFitnessFunction {
 
     private boolean compareAntecedents(char[] individuals, char[] ruleSet) {
         for (int i = 0; i < ruleLength - 1; i++) {
-            if (individuals[i] != ruleSet[i]) {
+            if (individuals[i] != ruleSet[i] && individuals[i] != '#') {
                 return false;
             }
         }
         return true;
     }
 
-    // Creates an ArrayList of rules from the input data,
+    //Creates an ArrayList of rules from the input data,
     private ArrayList createRuleSet(ArrayList data) {
 
         ArrayList tmp;
@@ -90,13 +89,7 @@ public class BinaryFitnessFunction {
             consequent = tmp.get(1).toString();
             ruleSet.add(new BinaryRule(antecedent.toCharArray(), consequent.charAt(0)));
         }
-
-        //Display rule Set
-//        System.out.println("Rule Set: ");
-//        for (int i = 0; i < ruleSet.size(); i++) {
-//            System.out.println(ruleSet.get(i));
-//        }
-//        System.out.println("Rule Set Size: " + ruleSet.size());
+        
         return ruleSet;
     }
 

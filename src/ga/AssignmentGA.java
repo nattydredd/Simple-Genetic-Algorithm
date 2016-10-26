@@ -1,7 +1,6 @@
 package ga;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 //@author n2-duran
 public class AssignmentGA {
@@ -9,64 +8,58 @@ public class AssignmentGA {
     //Utility variables
     public static String fileName = "data1.txt";
     public static ArrayList data;
-    public static Random rng = new Random();
 
     //Algorithm variables
     public static BinaryFitnessFunction fitness;
     public static Population population;
+    
     public static int rulesPerIndividual = 10;
+    public static int ruleLength = 6;
 
-    //Algorithm parameters
     public static int populationSize = 10;
-    public static int chromosomeLength = 60;
-    public static double mutationRate = 0.01;
+    public static int chromosomeLength = rulesPerIndividual * ruleLength;
+    public static double mutationRate = 0.02;
 
-    public static int targetFitness = 10;
+    public static int targetFitness = rulesPerIndividual;
     public static int maxGenerations = 50;
     public static int generation = 0;
 
     public static void main(String[] args) {
 
         //Load data from file
-        DataLoader loader = new DataLoader("src/ga/data/", fileName);
+        DataLoader loader = new DataLoader("src/data/", fileName);
+        
         //Create solution set from data
-        fitness = new BinaryFitnessFunction(loader.getData(), rulesPerIndividual);
+        fitness = new BinaryFitnessFunction(loader.getData(), rulesPerIndividual, ruleLength);
 
         //Initialise and evaluate a new population
-        population = new Population(populationSize, chromosomeLength);
-        population.initialise();
+        population = new Population(populationSize, chromosomeLength, ruleLength);
         fitness.evaluatePopulation(population);
 
+        //Display initial population
         System.out.println("Initial Population:");
         printGeneration();
 
-        while (generation <= maxGenerations ^ (population.getFittest().getFitness() == targetFitness)) {
+        //While maxiumum generations or target fitness not reached
+        while ((generation < maxGenerations) ^ (population.getFittest().getFitness() == targetFitness)) {
             generation++;
 
             //Selection
             population.tournamentSelection();
-            fitness.evaluatePopulation(population);
-            System.out.println("After Selection:");
-            printGeneration();
 
             //Crossover
             population.crossover();
-            System.out.println("After Crossover:");
-            fitness.evaluatePopulation(population);
-            printGeneration();
 
             //Mutation
             population.mutation(mutationRate);
-            System.out.println("After Mutation:");
-            fitness.evaluatePopulation(population);
-            printGeneration();
 
             //Evaluate
             fitness.evaluatePopulation(population);
             printGeneration();
         }
+        
         System.out.println("--------------------");
-        System.out.println("Found Solution!");
+        System.out.println("Found solution or reached maximum generations");
         System.out.println("Generation: " + generation);
     }
 
