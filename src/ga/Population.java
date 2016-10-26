@@ -56,12 +56,12 @@ public class Population {
         for (int i = 0; i < populationSize; i++) {
 
             char[] tmpChromosome = new char[chromosomeLength];
-            int index = ruleLength - 1;
-
+            
+            int consequentIndex = ruleLength - 1;
             for (int j = 0; j < chromosomeLength; j++) {
 
                 //Check index is not a rule consequent
-                if (j != index) {
+                if (j != consequentIndex) {
 
                     int tmpRng = rng.nextInt(3);
                     if (tmpRng == 2) {
@@ -71,7 +71,7 @@ public class Population {
                     }
                 } else {
                     tmpChromosome[j] = rng.nextBoolean() ? '1' : '0';
-                    index += ruleLength;
+                    consequentIndex += ruleLength;
                 }
             }
             individuals[i] = new Individual(tmpChromosome);
@@ -127,10 +127,12 @@ public class Population {
     public void mutation(double mutationRate) {
 
         for (int i = 0; i < populationSize; i++) {
-            int index = ruleLength - 1;
+            
+            int conseequentIndex = ruleLength - 1;
             for (int j = 0; j < chromosomeLength; j++) {
+                
                 //Check index is not a rule consequent
-                if (j != index) {
+                if (j != conseequentIndex) {
                     if (Math.random() <= mutationRate) {
 
                         if (individuals[i].getChromosome()[j] == '1') {
@@ -138,10 +140,9 @@ public class Population {
                         } else {
                             individuals[i].getChromosome()[j] = (rng.nextBoolean()) ? '#' : '1';
                         }
-
                     }
                 } else {
-                    index += ruleLength;
+                    conseequentIndex += ruleLength;
                 }
             }
         }

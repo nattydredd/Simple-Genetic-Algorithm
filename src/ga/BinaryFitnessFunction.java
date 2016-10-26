@@ -14,6 +14,7 @@ public class BinaryFitnessFunction {
         this.rulesPerIndividual = rulesPerIndividual;
         this.ruleLength = ruleLength;       
         this.ruleSet = new ArrayList<BinaryRule>();
+        //Creates array of rules from raw data
         this.ruleSet = createRuleSet(data);
     }
 
@@ -40,23 +41,11 @@ public class BinaryFitnessFunction {
             consequent = individual.getChromosome()[index + ruleLength - 1];
             index += ruleLength;
 
-            //Compare individuals rules to ruleSet
+            //Compare individuals rule to ruleSet
             for (int j = 0; j < ruleSet.size(); j++) {
                 BinaryRule rule = ruleSet.get(j);
 
-                if (compareAntecedents(antecedent, rule.antecedent)) {
-
-//                    System.out.println("Rule matches!");
-//                    System.out.print("Antecedent = ");
-//                    for (int k = 0; k < antecedent.length; k++) {
-//                        System.out.print(antecedent[k]);
-//                    }
-//                    System.out.print("\nRule Antecedent = ");
-//                    for (int k = 0; k < antecedent.length; k++) {
-//                        System.out.print(rule.antecedent[k]);
-//                    }
-//                    System.out.println("\nConsequent = " + consequent + "\nRule Consequent = " + rule.consequent);
-                   
+                if (compareAntecedents(antecedent, rule.antecedent)) {                  
                     if (consequent == rule.consequent) {
                         fitness++;
                     }

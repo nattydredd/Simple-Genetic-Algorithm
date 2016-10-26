@@ -58,7 +58,7 @@ public class AssignmentGA {
             printGeneration();
         }
         
-        System.out.println("--------------------");
+        System.out.println("---------------------------------------------");
         System.out.println("Found solution or reached maximum generations");
         System.out.println("Generation: " + generation);
     }

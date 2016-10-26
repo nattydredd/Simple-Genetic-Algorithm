@@ -37,17 +37,18 @@ public class DataLoader {
 
         String line;      
         try {
-            //Always wrap FileReader in BufferedReader.
+            //Read file at specified path
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path + fileName));
 
             while ((line = bufferedReader.readLine()) != null) {
                 
+                //Create array for each instance of data
                 ArrayList<String> instance = new ArrayList<String>();
                 int varCount = line.split(" ").length;
                 
                 for (int i = 0; i < varCount; i++) {
                     instance.add(line.split(" ")[i]);
-                }
+                }                
                 data.add(instance);
             }
 
