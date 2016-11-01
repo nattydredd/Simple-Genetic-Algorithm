@@ -1,6 +1,9 @@
 package ga;
 
+import utilitys.DataLoader;
 import java.util.ArrayList;
+import org.jfree.ui.RefineryUtilities;
+import utilitys.ChartBuilder;
 
 //@author n2-duran
 public class AssignmentGA {
@@ -8,27 +11,29 @@ public class AssignmentGA {
     //Utility variables
     public static String fileName = "data1.txt";
     public static ArrayList data;
+    public static ArrayList results = new ArrayList();
+    public static ChartBuilder resultsChart;
 
     //Algorithm variables
     public static BinaryFitnessFunction fitness;
     public static Population population;
-    
+
     public static int rulesPerIndividual = 10;
     public static int ruleLength = 6;
 
     public static int populationSize = 10;
     public static int chromosomeLength = rulesPerIndividual * ruleLength;
-    public static double mutationRate = 0.02;
+    public static double mutationRate = 0.03;
 
     public static int targetFitness = rulesPerIndividual;
-    public static int maxGenerations = 50;
+    public static int maxGenerations = 500;
     public static int generation = 0;
 
     public static void main(String[] args) {
 
         //Load data from file
         DataLoader loader = new DataLoader("src/data/", fileName);
-        
+
         //Create solution set from data
         fitness = new BinaryFitnessFunction(loader.getData(), rulesPerIndividual, ruleLength);
 
@@ -57,10 +62,14 @@ public class AssignmentGA {
             fitness.evaluatePopulation(population);
             printGeneration();
         }
-        
+
+        //Display final result
         System.out.println("---------------------------------------------");
         System.out.println("Found solution or reached maximum generations");
         System.out.println("Generation: " + generation);
+
+        //Display chart
+        displayChart();
     }
 
     public static void printGeneration() {
@@ -79,5 +88,19 @@ public class AssignmentGA {
         System.out.println("Best Individual = " + population.getFittest().getFitness());
         System.out.println("");
         System.out.println(population.toString());
+
+        //Add data to results   
+        double[] generationResults = new double[2];
+        generationResults[0] = averageFitness;
+        generationResults[1] = population.getFittest().getFitness();
+        results.add(generationResults);
+
+    }
+
+    public static void displayChart() {
+        resultsChart = new ChartBuilder("Fitness Results", results);
+        resultsChart.pack();
+        RefineryUtilities.centerFrameOnScreen(resultsChart);
+        resultsChart.setVisible(true);
     }
 }
