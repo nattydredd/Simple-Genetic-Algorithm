@@ -1,4 +1,4 @@
-package ga;
+package utilitys;
 
 //@author n2-duran
 import java.io.BufferedReader;
