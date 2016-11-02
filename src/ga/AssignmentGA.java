@@ -25,8 +25,8 @@ public class AssignmentGA {
     public static int chromosomeLength = rulesPerIndividual * ruleLength;
     public static double mutationRate = 0.03;
 
-    public static int targetFitness = rulesPerIndividual;
-    public static int maxGenerations = 500;
+    public static int targetFitness = 32;
+    public static int maxGenerations = 100;
     public static int generation = 0;
 
     public static void main(String[] args) {
@@ -67,6 +67,8 @@ public class AssignmentGA {
         System.out.println("---------------------------------------------");
         System.out.println("Found solution or reached maximum generations");
         System.out.println("Generation: " + generation);
+        System.out.println("Best Individual: " + population.getFittest().toString());
+        System.out.println("Rules: \n" + population.getFittest().displayRules());
 
         //Display chart
         displayChart();
@@ -85,7 +87,7 @@ public class AssignmentGA {
         System.out.println("********************");
         System.out.println("Generation: " + generation);
         System.out.println("Average Fitness = " + averageFitness);
-        System.out.println("Best Individual = " + population.getFittest().getFitness());
+        System.out.println("Best Individual = " + population.getFittest().getFitness());       
         System.out.println("");
         System.out.println(population.toString());
 
