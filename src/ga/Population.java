@@ -1,6 +1,7 @@
 package ga;
 
 //@author n2-duran
+import java.util.Arrays;
 import java.util.Random;
 
 public class Population {
@@ -10,13 +11,14 @@ public class Population {
     private int populationSize;
     private int chromosomeLength;
     private int ruleLength;
-    private Individual fittestIndividual = new Individual();
+    private Individual fittestIndividual;
     private Individual[] individuals;
 
     public Population(int populationSize, int chromosomeLength, int ruleLength) {
         this.populationSize = populationSize;
         this.chromosomeLength = chromosomeLength;
         this.ruleLength = ruleLength;
+        this.fittestIndividual = new Individual();
         this.individuals = new Individual[populationSize];
         //Initialise a new population
         initialise();
@@ -56,7 +58,7 @@ public class Population {
         for (int i = 0; i < populationSize; i++) {
 
             char[] tmpChromosome = new char[chromosomeLength];
-            
+
             int consequentIndex = ruleLength - 1;
             for (int j = 0; j < chromosomeLength; j++) {
 
@@ -74,7 +76,7 @@ public class Population {
                     consequentIndex += ruleLength;
                 }
             }
-            individuals[i] = new Individual(tmpChromosome);
+            individuals[i] = new Individual(tmpChromosome, ruleLength);
         }
     }
 
@@ -107,8 +109,8 @@ public class Population {
             Individual parent1 = individuals[i];
             Individual parent2 = individuals[i + 1];
 
-            Individual offspring1 = new Individual(parent1.getChromosome().clone());
-            Individual offspring2 = new Individual(parent2.getChromosome().clone());
+            Individual offspring1 = new Individual(parent1.getChromosome().clone(), ruleLength);
+            Individual offspring2 = new Individual(parent2.getChromosome().clone(), ruleLength);
 
             int crossoverPoint = rng.nextInt(chromosomeLength);
 
@@ -127,12 +129,12 @@ public class Population {
     public void mutation(double mutationRate) {
 
         for (int i = 0; i < populationSize; i++) {
-            
-            int conseequentIndex = ruleLength - 1;
+
+            int consequentIndex = ruleLength - 1;
             for (int j = 0; j < chromosomeLength; j++) {
-                
+
                 //Check index is not a rule consequent
-                if (j != conseequentIndex) {
+                if (j != consequentIndex) {
                     if (Math.random() <= mutationRate) {
 
                         if (individuals[i].getChromosome()[j] == '1') {
@@ -142,7 +144,7 @@ public class Population {
                         }
                     }
                 } else {
-                    conseequentIndex += ruleLength;
+                    consequentIndex += ruleLength;
                 }
             }
         }

@@ -8,11 +8,11 @@ public class BinaryFitnessFunction {
 
     private int rulesPerIndividual;
     private int ruleLength;
-    private static ArrayList<BinaryRule> ruleSet;
+    private ArrayList<BinaryRule> ruleSet;
 
     public BinaryFitnessFunction(ArrayList data, int rulesPerIndividual, int ruleLength) {
         this.rulesPerIndividual = rulesPerIndividual;
-        this.ruleLength = ruleLength;       
+        this.ruleLength = ruleLength;
         this.ruleSet = new ArrayList<BinaryRule>();
         //Creates array of rules from raw data
         this.ruleSet = createRuleSet(data);
@@ -31,25 +31,19 @@ public class BinaryFitnessFunction {
     private void fitnessFunction(Individual individual) {
 
         int fitness = 0;
-        char[] antecedent = new char[rulesPerIndividual];
-        char consequent;
-        int index = 0;
-        for (int i = 0; i < rulesPerIndividual; i++) {
+        BinaryRule[] individualsRules = individual.getRules();
 
-            //Extract rules from individual
-            antecedent = Arrays.copyOfRange(individual.getChromosome(), index, (index + ruleLength - 1));
-            consequent = individual.getChromosome()[index + ruleLength - 1];
-            index += ruleLength;
+        for (int i = 0; i < ruleSet.size(); i++) {
+            BinaryRule rule = ruleSet.get(i);
 
             //Compare individuals rule to ruleSet
-            for (int j = 0; j < ruleSet.size(); j++) {
-                BinaryRule rule = ruleSet.get(j);
+            for (int j = 0; j < individualsRules.length; j++) {
 
-                if (compareAntecedents(antecedent, rule.antecedent)) {                  
-                    if (consequent == rule.consequent) {
+                if (compareAntecedents(individualsRules[j].antecedent, rule.antecedent)) {
+                    if (individualsRules[j].consequent == rule.consequent) {
                         fitness++;
                     }
-                    break;                   
+                    break;
                 }
             }
         }
@@ -78,7 +72,7 @@ public class BinaryFitnessFunction {
             consequent = tmp.get(1).toString();
             ruleSet.add(new BinaryRule(antecedent.toCharArray(), consequent.charAt(0)));
         }
-        
+
         return ruleSet;
     }
 
