@@ -2,7 +2,6 @@ package ga;
 
 //@author n2-duran
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BinaryFitnessFunction {
 

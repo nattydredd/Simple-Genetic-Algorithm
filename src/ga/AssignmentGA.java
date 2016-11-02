@@ -9,7 +9,7 @@ import utilitys.ChartBuilder;
 public class AssignmentGA {
 
     //Utility variables
-    public static String fileName = "data1.txt";
+    public static String fileName = "data2.txt";
     public static ArrayList data;
     public static ArrayList results = new ArrayList();
     public static ChartBuilder resultsChart;
@@ -19,15 +19,16 @@ public class AssignmentGA {
     public static Population population;
 
     public static int rulesPerIndividual = 10;
-    public static int ruleLength = 6;
+    public static int ruleLength = 7;
 
     public static int populationSize = 10;
     public static int chromosomeLength = rulesPerIndividual * ruleLength;
     public static double mutationRate = 0.03;
 
-    public static int targetFitness = 32;
+    public static int targetFitness = 64;
     public static int maxGenerations = 100;
     public static int generation = 0;
+    public static boolean elitism = true;
 
     public static void main(String[] args) {
 
@@ -49,6 +50,11 @@ public class AssignmentGA {
         while ((generation < maxGenerations) ^ (population.getFittest().getFitness() == targetFitness)) {
             generation++;
 
+            //Keep best individual from previous generation
+            if (elitism) {
+                population.getFittest();
+            }
+            
             //Selection
             population.tournamentSelection();
 
@@ -58,8 +64,15 @@ public class AssignmentGA {
             //Mutation
             population.mutation(mutationRate);
 
+            //Replace worst individual with best individual
+            if (elitism) {
+                fitness.evaluatePopulation(population);
+                population.setFittest();
+            }
+            
             //Evaluate
             fitness.evaluatePopulation(population);
+            
             printGeneration();
         }
 
