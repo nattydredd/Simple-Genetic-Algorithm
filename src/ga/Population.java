@@ -1,7 +1,6 @@
 package ga;
 
 //@author n2-duran
-import java.util.Arrays;
 import java.util.Random;
 
 public class Population {
@@ -50,7 +49,23 @@ public class Population {
                 fittestIndividual = individuals[i];
             }
         }
+
         return fittestIndividual;
+    }
+
+    public void setFittest() {
+        int lowestFitness = individuals[0].getFitness();
+        int lowestFitnessIndex = 0;
+
+        for (int i = 0; i < populationSize; i++) {
+
+            if (individuals[i].getFitness() < lowestFitness) {
+                lowestFitness = individuals[i].getFitness();
+                lowestFitnessIndex = i;
+            }
+        }
+
+        individuals[lowestFitnessIndex] = fittestIndividual;
     }
 
     public void initialise() {
