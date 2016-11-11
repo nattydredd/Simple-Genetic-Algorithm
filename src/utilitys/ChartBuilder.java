@@ -68,6 +68,7 @@ public class ChartBuilder extends ApplicationFrame {
         //Customise x axis    
         final NumberAxis xAxis = new NumberAxis("Generations");
         xAxis.setTickUnit(new NumberTickUnit(10));
+//        xAxis.set
         plot.setDomainAxis(xAxis);
 
         //Map data to appropriate axis
