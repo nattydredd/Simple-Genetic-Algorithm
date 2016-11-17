@@ -46,6 +46,7 @@ public class FloatIndividual {
         this.ruleLength = ruleLength;
     }
 
+    //Returns an individuals set of rules
     public FloatRule[] getRules() {
 
         FloatRule[] rules = new FloatRule[chromosome.length / ruleLength];
@@ -72,6 +73,7 @@ public class FloatIndividual {
         return rules;
     }
 
+    //Prints and individuals rules
     public String displayRules() {
         String result = "";
         FloatRule[] rules = getRules();
@@ -82,6 +84,7 @@ public class FloatIndividual {
         return result;
     }
     
+    //Orders consecutive pairs of genes into lowes then highest
     public double[] orderRangePairs(double[] antecedent) {
 
         for (int i = 0; i < antecedent.length; i += 2) {

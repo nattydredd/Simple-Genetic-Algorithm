@@ -4,6 +4,7 @@ import utilitys.DataLoader;
 import java.util.ArrayList;
 import org.jfree.ui.RefineryUtilities;
 import utilitys.ChartBuilder;
+import utilitys.XYPlotTestChartBuilder;
 
 //@author n2-duran
 public class BinaryGA {
@@ -14,16 +15,19 @@ public class BinaryGA {
     public static ArrayList results = new ArrayList();
     public static ChartBuilder resultsChart;
 
+    public static ArrayList testResults = new ArrayList();
+    public static XYPlotTestChartBuilder testChart;
+
     //Algorithm variables
-    public static BinaryFitnessFunction fitness;
+    public static BinaryFitnessFunction fitnessFunction;
     public static BinaryPopulation population;
 
-    public static int rulesPerIndividual = 10;
+    public static int rulesPerIndividual = 5;
     public static int ruleLength = 7;
 
-    public static int populationSize = 100;
+    public static int populationSize = 300;
     public static int chromosomeLength = rulesPerIndividual * ruleLength;
-    public static double mutationRate = 0.015;
+    public static double mutationRate = 0.008;
 
     public static int targetFitness = 64;
     public static int maxGenerations = 1000;
@@ -37,11 +41,11 @@ public class BinaryGA {
         DataLoader loader = new DataLoader("src/data/", fileName);
 
         //Create solution set from data
-        fitness = new BinaryFitnessFunction(loader.getData(), rulesPerIndividual, ruleLength);
+        fitnessFunction = new BinaryFitnessFunction(loader.getData(), rulesPerIndividual, ruleLength);
 
         //Initialise and evaluate a new population
         population = new BinaryPopulation(populationSize, chromosomeLength, ruleLength);
-        fitness.evaluatePopulation(population);
+        fitnessFunction.evaluatePopulation(population);
 
         //Display initial population
         System.out.println("Initial Population:");
@@ -61,21 +65,22 @@ public class BinaryGA {
 //            population.rouletteSelection();
 
             //Crossover
-            population.oneChildCrossover(inbreeding);
-//            population.twoChildCrossover();
+//            population.oneChildCrossover(inbreeding);
+            population.twoChildCrossover();
 
             //Mutation
             population.mutation(mutationRate);
 
             //Replace worst individual with best individual
             if (elitism) {
-                fitness.evaluatePopulation(population);
+                fitnessFunction.evaluatePopulation(population);
                 population.putFittest();
             }
 
             //Evaluate
-            fitness.evaluatePopulation(population);
+            fitnessFunction.evaluatePopulation(population);
 
+            //Display generation results
             printGeneration();
         }
 
@@ -108,12 +113,11 @@ public class BinaryGA {
 //        System.out.println("");
 //        System.out.println(population.toString());
 
-        //Add data to results   
+        //Add data to chart results   
         double[] generationResults = new double[2];
         generationResults[0] = averageFitness;
         generationResults[1] = population.getFittestIndividual().getFitness();
         results.add(generationResults);
-
     }
 
     public static void displayChart() {
@@ -122,4 +126,5 @@ public class BinaryGA {
         RefineryUtilities.centerFrameOnScreen(resultsChart);
         resultsChart.setVisible(true);
     }
-}
+
+}//End BinaryGA

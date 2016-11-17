@@ -46,6 +46,7 @@ public class BinaryIndividual {
         this.ruleLength = ruleLength;
     }
 
+    //Returns an individuals set of rules
     public BinaryRule[] getRules() {
 
         BinaryRule[] rules = new BinaryRule[chromosome.length / ruleLength];
@@ -72,6 +73,7 @@ public class BinaryIndividual {
         return rules;
     }
 
+    //Prints and individuals rules
     public String displayRules() {
         String result = "";
         BinaryRule[] rules = getRules();
