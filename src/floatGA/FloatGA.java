@@ -15,13 +15,13 @@ public class FloatGA {
     public static ChartBuilder resultsChart;
 
     //Algorithm variables
-    public static FloatFitnessFunction fitness;
+    public static FloatFitnessFunction fitnessFunction;
     public static FloatPopulation population;
 
     public static int rulesPerIndividual = 10;
     public static int ruleLength = 7;
 
-    public static int populationSize = 10;
+    public static int populationSize = 100;
     public static int chromosomeLength = rulesPerIndividual * ((ruleLength * 2) - 1);
     public static double mutationRate = 0.01;
     public static double mutationIncrement = 1e4;//1e4 - 1e8
@@ -29,7 +29,8 @@ public class FloatGA {
     public static int targetFitness = 2000;
     public static int maxGenerations = 1000;
     public static int generation = 0;
-    public static boolean elitism = true;
+    public static boolean elitism = true;//Keep best individual every generation
+    public static boolean inbreeding = true;//Allow duplicate parents for oneChildCrossover
 
     public static void main(String[] args) {
 
@@ -37,12 +38,11 @@ public class FloatGA {
         DataLoader loader = new DataLoader("src/data/", fileName);
 
         //Create solution set from data
-        fitness = new FloatFitnessFunction(loader.getData(), rulesPerIndividual, ruleLength);
+        fitnessFunction = new FloatFitnessFunction(loader.getData(), rulesPerIndividual, ruleLength);
 
         //Initialise and evaluate a new population
         population = new FloatPopulation(populationSize, chromosomeLength, ruleLength);
-
-        fitness.evaluatePopulation(population);
+        fitnessFunction.evaluatePopulation(population);
 
         //Display initial population
         System.out.println("Initial Population:");
@@ -58,11 +58,11 @@ public class FloatGA {
             }
 
             //Selection
-//            population.tournamentSelection();
-            population.rouletteSelection();
+            population.tournamentSelection();
+//            population.rouletteSelection();
 
             //Crossover
-//            population.oneChildCrossover();
+//            population.oneChildCrossover(inbreeding);
             population.twoChildCrossover();
 
             //Mutation
@@ -70,13 +70,14 @@ public class FloatGA {
 
             //Replace worst individual with best individual
             if (elitism) {
-                fitness.evaluatePopulation(population);
+                fitnessFunction.evaluatePopulation(population);
                 population.putFittest();
             }
 
             //Evaluate
-            fitness.evaluatePopulation(population);
+            fitnessFunction.evaluatePopulation(population);
 
+            //Display generation results
             printGeneration();
         }
 
@@ -114,7 +115,6 @@ public class FloatGA {
         generationResults[0] = averageFitness;
         generationResults[1] = population.getFittestIndividual().getFitness();
         results.add(generationResults);
-
     }
 
     public static void displayChart() {
