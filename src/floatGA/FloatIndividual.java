@@ -46,6 +46,18 @@ public class FloatIndividual {
         this.ruleLength = ruleLength;
     }
 
+    //Returns a clone of this individual
+    public FloatIndividual clone() {
+    
+        FloatIndividual clone = new FloatIndividual();
+        
+        clone.setChromosome(this.getChromosome().clone());
+        clone.setFitness(this.getFitness());
+        clone.setRuleLength(this.getRuleLength());
+        
+        return clone;
+    }
+    
     //Returns an individuals set of rules
     public FloatRule[] getRules() {
 

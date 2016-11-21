@@ -3,20 +3,15 @@ package binaryGA;
 import utilitys.DataLoader;
 import java.util.ArrayList;
 import org.jfree.ui.RefineryUtilities;
-import utilitys.ChartBuilder;
-import utilitys.XYPlotTestChartBuilder;
+import utilitys.BinaryGAChartBuilder;
 
 //@author n2-duran
 public class BinaryGA {
 
     //Utility variables
     public static String fileName = "data2.txt";
-    public static ArrayList data;
     public static ArrayList results = new ArrayList();
-    public static ChartBuilder resultsChart;
-
-    public static ArrayList testResults = new ArrayList();
-    public static XYPlotTestChartBuilder testChart;
+    public static BinaryGAChartBuilder resultsChart;
 
     //Algorithm variables
     public static BinaryFitnessFunction fitnessFunction;
@@ -121,7 +116,7 @@ public class BinaryGA {
     }
 
     public static void displayChart() {
-        resultsChart = new ChartBuilder("Fitness Results", results);
+        resultsChart = new BinaryGAChartBuilder("Fitness Results", results);
         resultsChart.pack();
         RefineryUtilities.centerFrameOnScreen(resultsChart);
         resultsChart.setVisible(true);
